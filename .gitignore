@@ -1,0 +1,13 @@
+.idea
+
+/src/**
+!/src/
+
+/log/nginx/**
+!/log/nginx/
+
+/nginx/**
+!/nginx/default.conf
+
+/mysql/**
+!/mysql/
