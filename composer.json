@@ -1,0 +1,35 @@
+{
+    "name": "dlavoie/docker-valet",
+    "description": "Valet equivalent for laravel multi-sites docker.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Lavoie",
+            "email": "dlavoie@boitebeet.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "illuminate/container": "^7.25",
+        "mnapoli/silly": "^1.7",
+        "symfony/process": "^5.1",
+        "phpseclib/phpseclib": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Valet\\": "cli/Valet/"
+        }
+    },
+    "autoload-dev": {
+        "files": [
+            "cli/includes/facades.php",
+            "cli/includes/helpers.php"
+        ]
+    },
+    "bin": [
+        "bin/valet"
+    ]
+}

@@ -11,3 +11,5 @@
 
 /mysql/**
 !/mysql/.gitkeep
+
+vendor/*

@@ -42,7 +42,7 @@ if(file_exists(realpath(__DIR__ . "/../nginx/$serverName.conf"))){
     exit("$site already exists.");
 }
 
-$stub = file_get_contents(__DIR__ . '/nginx.stub');
+$stub = file_get_contents(__DIR__ . '/nginx.laravel.stub');
 
 $conf = str_replace(
     ['{SERVER_NAME}', '{APP_DIR}', '{APP_DIST}'],

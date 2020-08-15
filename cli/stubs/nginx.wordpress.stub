@@ -1,0 +1,56 @@
+server {
+    listen ${3:-80};
+    listen ${4:-443} ssl http2;
+    server_name .$1;
+    root \"$2\";
+
+    index index.php index.html index.htm;
+
+    charset utf-8;
+
+    $rewritesTXT
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { allow all; access_log off; log_not_found off; }
+
+    location ~ /.*\.(jpg|jpeg|png|js|css)$ {
+        try_files \$uri =404;
+    }
+
+    location / {
+        try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    if (!-e \$request_filename) {
+        # Add trailing slash to */wp-admin requests.
+        rewrite /wp-admin$ \$scheme://\$host\$uri/ permanent;
+
+        # WordPress in a subdirectory rewrite rules
+        rewrite ^/([_0-9a-zA-Z-]+/)?(wp-.*|xmlrpc.php) /wp/\$2 break;
+    }
+
+    location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        include fastcgi_params;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        fastcgi_pass unix:/var/run/php/php$5-fpm.sock;
+        fastcgi_intercept_errors on;
+        fastcgi_buffers 16 16k;
+        fastcgi_buffer_size 32k;
+    }
+
+    $configureXhgui
+
+    access_log off;
+    error_log  /var/log/nginx/$1-error.log error;
+
+    sendfile off;
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+    ssl_certificate     /etc/ssl/certs/$1.crt;
+    ssl_certificate_key /etc/ssl/certs/$1.key;
+}
