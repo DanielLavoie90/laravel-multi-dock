@@ -1,13 +1,13 @@
 .idea
 
 /src/**
-!/src/
+!/src/.gitkeep
 
 /log/nginx/**
-!/log/nginx/
+!/log/nginx/.gitkeep
 
 /nginx/**
 !/nginx/default.conf
 
 /mysql/**
-!/mysql/
+!/mysql/.gitkeep
