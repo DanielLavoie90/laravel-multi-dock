@@ -13,6 +13,7 @@ services:
     volumes:
       - ./src:/var/www/html
       - ./nginx:/etc/nginx/conf.d
+      - ./certificates:/etc/nginx/ssl
       - ./log/nginx:/var/log/nginx
     depends_on:
       - php

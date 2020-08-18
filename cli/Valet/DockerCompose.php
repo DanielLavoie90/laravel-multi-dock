@@ -11,13 +11,44 @@ class DockerCompose
         $this->cli = $cli;
     }
 
-    public function run($command)
+    public function run($command, $passthru=true, $onError=null)
     {
-        return $this->cli->run("cd " . DOCKER_COMPOSE_PATH . " && $command");
+        $dockerCommand = "cd " . DOCKER_COMPOSE_PATH . " && docker-compose $command";
+        if($passthru) {
+            $this->cli->passthru($dockerCommand);
+            return true;
+        } else {
+            return $this->cli->run($dockerCommand, $onError);
+        }
     }
 
-    public function restart($container)
+    public function up()
     {
-        $this->run("docker-compose restart $container");
+        $this->run("up -d");
+    }
+
+    public function stop()
+    {
+        $this->run("stop");
+    }
+
+    public function restart($container = null)
+    {
+        $this->run("restart $container");
+    }
+
+    public function services()
+    {
+        $this->run("ps --services");
+    }
+
+    public function checkService($service)
+    {
+        $result = $this->run("ps $service", false, function ($errorCode, $output){
+            warning('Invalid service name. Valid services are:');
+            $this->services();
+            return false;
+        });
+        return !str_starts_with($result, 'No such service');
     }
 }

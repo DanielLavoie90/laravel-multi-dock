@@ -30,7 +30,15 @@ class Facade
     }
 }
 
+class Artisan extends Facade
+{
+}
+
 class CommandLine extends Facade
+{
+}
+
+class Composer extends Facade
 {
 }
 
@@ -39,6 +47,10 @@ class DockerCompose extends Facade
 }
 
 class Filesystem extends Facade
+{
+}
+
+class Mysql extends Facade
 {
 }
 

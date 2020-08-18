@@ -16,7 +16,11 @@ $_SERVER['HOME'] = str_replace('\\', '/', $_SERVER['HOME']);
 define('CALL_WD', getcwd());
 define('CALL_SITE', basename(CALL_WD));
 define('DOCKER_COMPOSE_PATH', str_replace('\\', '/', realpath(__DIR__.'/../../')));
-define('NGINX_CONF_PATH', __DIR__ . "/../nginx/");
+define('NGINX_CONF_PATH', __DIR__ . "/../../nginx/");
+
+function isSite(){
+    return is_dir(DOCKER_COMPOSE_PATH . '/src/' . CALL_SITE);
+}
 
 /**
  * Output the given text to the console.
