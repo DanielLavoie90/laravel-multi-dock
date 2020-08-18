@@ -30,7 +30,7 @@ class Nginx
             warning("Argument `tld` must at least contain one character.");
             throw new InvalidArgumentException("Argument `tld` must at least contain one character.");
         }
-        if(isSite()){
+        if(!isSite()){
             throw new InvalidArgumentException("Cannot find folder: `" . DOCKER_COMPOSE_PATH . '/src/' . CALL_SITE . "`");
         }
     }
