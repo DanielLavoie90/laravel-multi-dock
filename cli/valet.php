@@ -181,7 +181,11 @@ $app->command('composer:update', function () {
 
 $app->command('artisan com', function ($com) {
     Artisan::run($com);
-});
+})
+    ->descriptions("Run an artisan command for the current site.", [
+        'com' => 'Command you wish to run for artisan. (i.e. migrate)'
+    ])
+    ->setAliases(['art']);
 
 /*
  * Run the application.
