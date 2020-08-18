@@ -1,5 +1,9 @@
 # Laravel Multi Hosting Docker
 
+Based on:
+- Valet cli for windows [cretueusebiu/valet-windows](https://github.com/cretueusebiu/valet-windows)
+- Single app docker [shincoder/homestead-docker](https://github.com/jaouadk/homestead-docker)
+
 ## Config
 
 You should add /bin to your PATH environment variable. This will enable you to access the cli from anywhere.
