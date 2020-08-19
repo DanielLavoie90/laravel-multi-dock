@@ -167,14 +167,14 @@ $app->command('composer:du', function () {
 
 $app->command('composer:install', function () {
     mustBeCallFromSite();
-    Composer::run('install');
+    Composer::run('install --ignore-platform-reqs');
 })
     ->descriptions("Run composer install for the current site.")
     ->setAliases(['ci']);
 
 $app->command('composer:update', function () {
     mustBeCallFromSite();
-    Composer::run('update');
+    Composer::run('update --ignore-platform-reqs');
 })
     ->descriptions("Run composer update for the current site.")
     ->setAliases(['cu']);
