@@ -25,8 +25,8 @@ class Mysql
 
     public function createUser($name, $password, $database=null)
     {
-        $command = "CREATE USER IF NOT EXISTS '$name'@'0.0.0.0' IDENTIFIED BY '$password';";
-        $this->run($command);
+        $command = "CREATE USER IF NOT EXISTS '$name'@'localhost' IDENTIFIED BY '$password';";
+        $this->run($command, 'root', 'secret');
         if($database) {
             $this->grantAccess($name, $password, $database);
         }
@@ -34,12 +34,12 @@ class Mysql
 
     public function grantAccess($name, $password, $database='*', $grant='ALL', $withGrantOption=true)
     {
-        $command = "GRANT $grant ON $database.* TO '$name'@'0.0.0.0' IDENTIFIED BY '$password'" .
-            $withGrantOption ? "WITH GRANT OPTION;" : ";";
-        $this->run($command);
+        $command = "GRANT $grant ON $database.* TO '$name'@'localhost' IDENTIFIED BY '$password'" .
+            ($withGrantOption ? "WITH GRANT OPTION;" : ";");
+        $this->run($command, 'root', 'secret');
 
         $command = "GRANT $grant ON $database.* TO '$name'@'%' IDENTIFIED BY '$password'" .
-            $withGrantOption ? "WITH GRANT OPTION;" : ";";
-        $this->run($command);
+            ($withGrantOption ? "WITH GRANT OPTION;" : ";");
+        $this->run($command, 'root', 'secret');
     }
 }

@@ -84,7 +84,7 @@ $app->command('db:new [name]', function ($input, $output, $name = null) {
         'name' => 'name of the database to create. (Default: folder where you called valet)'
     ]);
 
-$app->command('db:user name password [--database=]', function ($name, $password, $database = null) {
+$app->command('db:user name password [-d|--database=]', function ($name, $password, $database = null) {
     Mysql::createUser($name, $password, $database);
 })
     ->descriptions('Create a new database user.', [
@@ -93,13 +93,13 @@ $app->command('db:user name password [--database=]', function ($name, $password,
         '--database' => 'Database to give access to the user. Use * to grant all. (Default=null)'
     ]);
 
-$app->command('db:grant user password database [--grant=] [-o|--without-grant-option]', function ($user, $password, $database, $withoutGrantOption, $grant = 'ALL') {
+$app->command('db:grant user password [-d|--database=] [-g|--grant=] [-o|--without-grant-option]', function ($user, $password, $withoutGrantOption, $database='*', $grant = 'ALL') {
     Mysql::grantAccess($user, $password, $database, $grant, !$withoutGrantOption);
 })
     ->descriptions('Give a user access to a database.', [
         'user' => 'User you want to give access.',
         'password' => 'Password the user will use to access.',
-        'database' => 'The database you want to give access to. (use * for all)',
+        '--database' => 'The database you want to give access to. (use * for all)',
         '--grant' => 'The name of the grant you want the user to have.',
         '--without-grant-option' => "Don't give grant option to the user for that database."
     ])
