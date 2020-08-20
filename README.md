@@ -12,9 +12,10 @@ Out of the box you can simply put your projects into the src folder and start us
 
 If you want, you can change the docker-compose.yml to your need.
 
-## Missing
+## Hosts
+**You don't need to use your hosts file or Acrylic DNS if your using the default `vcap.me` tld for your sites.**
 
-I didn't create NPM commands yet. Next on my list.
+Every site that hit the domain *.vcap.me is resolved as 127.0.0.1
 
 ## CLI
 

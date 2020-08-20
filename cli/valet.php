@@ -128,7 +128,7 @@ $app->command('site:link [--name=] [--dist=] [--tld=] [-d|--subdomain] [-s|--sec
         '--dist' => 'Distribution folder inside your application. Put `null` for root path. (Default=public)',
         '--secure' => 'Secure the new site with SSL.',
         '--subdomain' => 'Apply a wildcard subdomain to the server name in Nginx conf.',
-        '--tld' => 'Change the TLD for your application. (Default=test)'
+        '--tld' => 'Change the TLD for your application. (Default=vcap.me)'
     ])
     ->setAliases(['link']);
 
@@ -147,7 +147,7 @@ $app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain]', funct
         '--name' => 'Specify the name of the site. (Default: App folder name)',
         '--dist' => 'Distribution folder inside your application. Put `null` for root path. (Default=public)',
         '--subdomain' => 'Apply a wildcard subdomain to the server name in Nginx conf.',
-        '--tld' => 'Change the TLD for your application. (Default=test)'
+        '--tld' => 'Change the TLD for your application. (Default=vcap.me)'
     ])
     ->setAliases(['secure']);
 
