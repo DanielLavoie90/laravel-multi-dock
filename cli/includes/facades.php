@@ -58,6 +58,10 @@ class Nginx extends Facade
 {
 }
 
+class Npm extends Facade
+{
+}
+
 class Prompt extends Facade
 {
 }

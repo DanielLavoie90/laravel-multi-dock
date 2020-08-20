@@ -105,7 +105,7 @@ $app->command('db:grant user password [-d|--database=] [-g|--grant=] [-o|--witho
     ])
     ->setAliases(['grant']);
 
-$app->command('site:link [--name=] [--dist=] [--tld=] [--subdomain] [-s|--secure]', function ($input, $output, $subdomain, $secure, $name = null, $dist = 'public', $tld = 'test') {
+$app->command('site:link [--name=] [--dist=] [--tld=] [-d|--subdomain] [-s|--secure]', function ($input, $output, $subdomain, $secure, $name = null, $dist = 'public', $tld = 'vcap.me') {
     mustBeCallFromSite();
     Nginx::validateArguments($tld);
 
@@ -132,7 +132,7 @@ $app->command('site:link [--name=] [--dist=] [--tld=] [--subdomain] [-s|--secure
     ])
     ->setAliases(['link']);
 
-$app->command('site:secure [--name=] [--dist=] [--tld=] [--subdomain]', function ($subdomain, $name = null, $dist = 'public', $tld = 'test') {
+$app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain]', function ($subdomain, $name = null, $dist = 'public', $tld = 'vcap.me') {
     mustBeCallFromSite();
     Nginx::validateArguments($tld);
 
@@ -151,9 +151,10 @@ $app->command('site:secure [--name=] [--dist=] [--tld=] [--subdomain]', function
     ])
     ->setAliases(['secure']);
 
-$app->command('composer com', function ($com) {
+$app->command('composer com*', function ($com) {
     mustBeCallFromSite();
-    Composer::run($com);
+    $command = join(' ', $com);
+    Composer::run($command);
 })
     ->descriptions("Run composer dump-autoload for the current site.")
     ->setAliases(['c']);
@@ -179,14 +180,24 @@ $app->command('composer:update', function () {
     ->descriptions("Run composer update for the current site.")
     ->setAliases(['cu']);
 
-$app->command('artisan com', function ($com) {
-    Artisan::run($com);
+$app->command('artisan com*', function ($com) {
+    mustBeCallFromSite();
+    $command = join(' ', $com);
+    Artisan::run($command);
 })
     ->descriptions("Run an artisan command for the current site.", [
         'com' => 'Command you wish to run for artisan. (i.e. migrate)'
     ])
     ->setAliases(['art']);
 
+$app->command('npm com*', function ($com) {
+    mustBeCallFromSite();
+    $command = join(' ', $com);
+    Npm::run($command);
+})->descriptions("Run an npm command for the current site.", [
+    'com' => 'Command you wish to run for npm. (i.e. "run watch")'
+])
+    ->setAliases(['n']);
 /*
  * Run the application.
  */
