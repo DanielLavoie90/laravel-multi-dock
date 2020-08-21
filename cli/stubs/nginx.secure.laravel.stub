@@ -8,8 +8,8 @@ server {
     listen 443 ssl http2;
     index index.php index.html;
     server_name {SERVER_NAME};
-    error_log  /var/log/nginx/{APP_DIR}/error.log;
-    access_log /var/log/nginx/{APP_DIR}/access.log;
+    error_log  /var/log/nginx/{APP_DIR}_error.log;
+    access_log /var/log/nginx/{APP_DIR}_access.log;
     root /var/www/html/{APP_DIR}{APP_DIST};
 
     ssl_certificate "{SITE_CERT}";
