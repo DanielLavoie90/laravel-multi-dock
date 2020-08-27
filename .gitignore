@@ -15,4 +15,7 @@
 /mysql/**
 !/mysql/.gitkeep
 
+/php/**
+!/php/.gitkeep
+
 vendor/*

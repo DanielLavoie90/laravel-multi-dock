@@ -46,6 +46,7 @@ services:
       dockerfile: php.dockerfile
     container_name: php
     volumes:
+      - ./php:/usr/local/etc/php/conf.d
       - ./src:/var/www/html
     ports:
       - "9000:9000"

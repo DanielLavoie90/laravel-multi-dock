@@ -42,8 +42,8 @@ $app->command('docker com', function ($com) {
     ])
     ->setAliases(['d']);
 
-$app->command('docker:up', function () {
-    DockerCompose::up();
+$app->command('docker:up [-b|--build]', function ($build) {
+    DockerCompose::up($build);
 })
     ->descriptions("Run docker-compose up.")
     ->setAliases(['up']);

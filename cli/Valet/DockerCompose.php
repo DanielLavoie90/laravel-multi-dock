@@ -22,9 +22,10 @@ class DockerCompose
         }
     }
 
-    public function up()
+    public function up($build = false)
     {
-        $this->run("up -d");
+        $command = "up -d" . ($build ? " --build" : "");
+        $this->run($command);
     }
 
     public function stop()
