@@ -12,12 +12,13 @@ services:
       - "443:443"
     volumes:
       - ./src:/var/www/html
-      - ./nginx:/etc/nginx/conf.d
-      - ./certificates:/etc/nginx/ssl
-      - ./log/nginx:/var/log/nginx
+      - ${DATA_PATH_HOST}/nginx:/etc/nginx/conf.d
+      - ${DATA_PATH_HOST}/certificates:/etc/nginx/ssl
+      - ${DATA_PATH_HOST}/log/nginx:/var/log/nginx
     depends_on:
       - php
       - mysql
+      - redis
     networks:
       - laravel
 
@@ -36,7 +37,7 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
     networks:
       - laravel
 
@@ -110,10 +111,12 @@ services:
         - no_proxy
     container_name: php
     volumes:
-      - ./php:/usr/local/etc/php/conf.d
+      - ${DATA_PATH_HOST}/php:/usr/local/etc/php/conf.d
       - ./src:/var/www/html
     ports:
       - "9000:9000"
+    depends_on:
+      - redis
     networks:
       - laravel
 
@@ -211,5 +214,15 @@ services:
       - mysql
     working_dir: /var/www/html
     entrypoint: ['php', '/var/www/html/artisan']
+    networks:
+      - laravel
+
+  redis:
+    build: ./containers/redis
+    container_name: redis
+    volumes:
+      - ${DATA_PATH_HOST}/redis:/data
+    ports:
+      - "${REDIS_PORT}:6379"
     networks:
       - laravel
