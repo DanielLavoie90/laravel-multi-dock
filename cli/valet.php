@@ -16,6 +16,8 @@ use Illuminate\Container\Container;
 use Silly\Application;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Valet\Commands\ArtisanCommands;
+use Valet\Commands\ComposerCommands;
 use function Valet\info;
 use function Valet\isSite;
 use function Valet\output;
@@ -62,7 +64,7 @@ $app->command('docker:stop', function () {
 
 $app->command('ssh [container]', function ($container = 'php') {
     if (DockerCompose::checkService($container)) {
-        DockerCompose::run("run $container sh");
+        DockerCompose::run("run $container bash");
     }
 })
     ->descriptions("SSH into a container", [
@@ -151,44 +153,9 @@ $app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain]', funct
     ])
     ->setAliases(['secure']);
 
-$app->command('composer com*', function ($com) {
-    mustBeCallFromSite();
-    $command = join(' ', $com);
-    Composer::run($command);
-})
-    ->descriptions("Run composer dump-autoload for the current site.")
-    ->setAliases(['c']);
+ComposerCommands::register($app);
 
-$app->command('composer:du', function () {
-    mustBeCallFromSite();
-    Composer::run('dump-autoload');
-})
-    ->descriptions("Run composer dump-autoload for the current site.")
-    ->setAliases(['du']);
-
-$app->command('composer:install', function () {
-    mustBeCallFromSite();
-    Composer::run('install --ignore-platform-reqs');
-})
-    ->descriptions("Run composer install for the current site.")
-    ->setAliases(['ci']);
-
-$app->command('composer:update', function () {
-    mustBeCallFromSite();
-    Composer::run('update --ignore-platform-reqs');
-})
-    ->descriptions("Run composer update for the current site.")
-    ->setAliases(['cu']);
-
-$app->command('artisan com*', function ($com) {
-    mustBeCallFromSite();
-    $command = join(' ', $com);
-    Artisan::run($command);
-})
-    ->descriptions("Run an artisan command for the current site.", [
-        'com' => 'Command you wish to run for artisan. (i.e. migrate)'
-    ])
-    ->setAliases(['art']);
+ArtisanCommands::register($app);
 
 $app->command('npm com*', function ($com) {
     mustBeCallFromSite();

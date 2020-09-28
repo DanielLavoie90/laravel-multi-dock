@@ -115,6 +115,7 @@ services:
       - ./src:/var/www/html
     ports:
       - "9000:9000"
+      - "9912:9912"
     depends_on:
       - redis
     networks:
