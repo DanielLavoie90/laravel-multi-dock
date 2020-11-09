@@ -45,7 +45,7 @@ class Nginx
 
         $conf = $this->buildUnsecureConf($baseName, $serverNames, CALL_SITE, $dist);
 
-        if(!$this->files->put(NGINX_CONF_PATH . "/$baseName.conf", $conf)){
+        if(!$this->files->put(NGINX_CONF_PATH . "$baseName.conf", $conf)){
             throw new RuntimeException("Could not save conf file to: {DockerPath}/nginx/$baseName.conf");
         }
 
@@ -63,7 +63,7 @@ class Nginx
 
         return str_replace(
             ['{SERVER_NAME}', '{APP_DIR}', '{APP_DIST}'],
-            [$serverNames, "/$directory", $dist],
+            [$serverNames, "$directory", $dist],
             $stub);
     }
 
@@ -73,7 +73,7 @@ class Nginx
         $this->createCertificate($baseName);
         $conf = $this->buildSecureConf($baseName, $serverNames, CALL_SITE, $dist);
 
-        if(!$this->files->put(NGINX_CONF_PATH . "/$baseName.conf", $conf)){
+        if(!$this->files->put(NGINX_CONF_PATH . "$baseName.conf", $conf)){
             throw new RuntimeException("Could not save conf file to: {DockerPath}/nginx/$baseName.conf");
         }
 
@@ -164,7 +164,7 @@ class Nginx
 
     public function certificatesPath()
     {
-        return DOCKER_COMPOSE_PATH.'/certificates';
+        return DOCKER_COMPOSE_PATH.'/data/certificates';
     }
 
     public function certificatesDockerPath()

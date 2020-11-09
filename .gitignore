@@ -1,21 +1,9 @@
 .idea
 
-/certificates/**
-!/certificates/.gitkeep
-
 /src/**
 !/src/.gitkeep
 
-/log/nginx/**
-!/log/nginx/.gitkeep
-
-/nginx/**
-!/nginx/default.conf
-
-/mysql/**
-!/mysql/.gitkeep
-
-/php/**
-!/php/.gitkeep
+/data/**
+!/data/**/.gitkeep
 
 vendor/*
