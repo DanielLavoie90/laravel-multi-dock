@@ -25,6 +25,7 @@ services:
   mysql:
     image: mysql:5.7.29
     container_name: mysql
+    command: ['--innodb-log-file-size=20000000']
     restart: unless-stopped
     tty: true
     ports:
