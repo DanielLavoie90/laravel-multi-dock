@@ -129,6 +129,7 @@ class Nginx
             ['dNSName' => $serverName],
             ['dNSName' => "*.$serverName"],
         ]);
+        $x509->setExtension('id-ce-keyUsage', array('digitalSignature', 'nonRepudiation', 'keyEncipherment'));
 
         $csr = $x509->saveCSR($x509->signCSR());
 
