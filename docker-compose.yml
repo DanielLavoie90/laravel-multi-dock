@@ -43,6 +43,26 @@ services:
     networks:
       - laravel
 
+  mysql8:
+    image: mysql:8.0.24
+    container_name: mysql8
+    command: ['--innodb-log-file-size=20000000']
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql8
+    volumes:
+      - ${DATA_PATH_HOST}/mysql8:/var/lib/mysql
+    networks:
+      - laravel
+
   php:
     build:
       context: ./containers/php-fpm

@@ -6,7 +6,7 @@ namespace Valet;
 
 class Artisan
 {
-    private $containerName = 'artisan';
+    private $containerName = 'php';
     /**
      * @var DockerCompose
      */
