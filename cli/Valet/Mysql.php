@@ -22,7 +22,7 @@ class Mysql
         $this->docker->run("exec -T $this->containerName mysql -u$user -p$password -e \"$command\"");
     }
 
-    public function createDatabase($name, $useMysql8=false)
+    public function createDatabase($name, $useMysql8=true)
     {
         if($useMysql8) {
             $this->useMysql8();
@@ -31,7 +31,7 @@ class Mysql
         $this->run($command);
     }
 
-    public function createUser($name, $password, $database=null, $useMysql8=false)
+    public function createUser($name, $password, $database=null, $useMysql8=true)
     {
         if($useMysql8) {
             $this->useMysql8();
@@ -43,7 +43,7 @@ class Mysql
         }
     }
 
-    public function grantAccess($name, $password, $database='*', $grant='ALL', $withGrantOption=true, $useMysql8=false)
+    public function grantAccess($name, $password, $database='*', $grant='ALL', $withGrantOption=true, $useMysql8=true)
     {
         if($useMysql8) {
             $this->useMysql8();

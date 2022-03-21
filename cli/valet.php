@@ -71,7 +71,7 @@ $app->command('ssh [container]', function ($container = 'php') {
         'container' => 'Name of the service of the container you want to ssh into. (Default=php)'
     ]);
 
-$app->command('db:new [name] [-8|--mysql-8]', function ($input, $output, $mysql8, $name = null) {
+$app->command('db:new [name] [-5|--mysql-5]', function ($input, $output, $mysql5, $name = null) {
     if (!$name) {
         if (!Prompt::yesNoQuestion($this, $input, $output, "Create database " . CALL_SITE . "? [Y/n]", true)) {
             $output->writeln('Ok bye!');
@@ -80,14 +80,14 @@ $app->command('db:new [name] [-8|--mysql-8]', function ($input, $output, $mysql8
     }
     $dbName = $name ?? CALL_SITE;
 
-    Mysql::createDatabase($dbName, $mysql8);
+    Mysql::createDatabase($dbName, !$mysql5);
 })
     ->descriptions("Create a new database.", [
         'name' => 'name of the database to create. (Default: folder where you called valet)'
     ]);
 
-$app->command('db:user name password [-d|--database=] [-8|--mysql-8]', function ($name, $password, $mysql8, $database = null) {
-    Mysql::createUser($name, $password, $database, $mysql8);
+$app->command('db:user name password [-d|--database=] [-5|--mysql-5]', function ($name, $password, $mysql5, $database = null) {
+    Mysql::createUser($name, $password, $database, !$mysql5);
 })
     ->descriptions('Create a new database user.', [
         'name' => 'Name of the user to add.',
@@ -95,8 +95,8 @@ $app->command('db:user name password [-d|--database=] [-8|--mysql-8]', function 
         '--database' => 'Database to give access to the user. Use * to grant all. (Default=null)'
     ]);
 
-$app->command('db:grant user password [-8|--mysql-8] [-d|--database=] [-g|--grant=] [-o|--without-grant-option]', function ($user, $password, $withoutGrantOption, $mysql8, $database='*', $grant = 'ALL') {
-    Mysql::grantAccess($user, $password, $database, $grant, !$withoutGrantOption, $mysql8);
+$app->command('db:grant user password [-5|--mysql-5] [-d|--database=] [-g|--grant=] [-o|--without-grant-option]', function ($user, $password, $withoutGrantOption, $mysql5, $database='*', $grant = 'ALL') {
+    Mysql::grantAccess($user, $password, $database, $grant, !$withoutGrantOption, !$mysql5);
 })
     ->descriptions('Give a user access to a database.', [
         'user' => 'User you want to give access.',
