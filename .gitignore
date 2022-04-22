@@ -5,6 +5,10 @@
 
 /data/**
 !/data/**/.gitkeep
+!/data/php/**.ini
+!/data/php73/**.ini
+!/data/php8/**.ini
+
 
 vendor/*
 

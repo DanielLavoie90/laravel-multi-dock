@@ -107,7 +107,7 @@ $app->command('db:grant user password [-5|--mysql-5] [-d|--database=] [-g|--gran
     ])
     ->setAliases(['grant']);
 
-$app->command('site:link [--name=] [--dist=] [--tld=] [-d|--subdomain] [-s|--secure]', function ($input, $output, $subdomain, $secure, $name = null, $dist = 'public', $tld = 'vcap.me') {
+$app->command('site:link [--name=] [--dist=] [--tld=] [-d|--subdomain] [-s|--secure] [--php=]', function ($input, $output, $subdomain, $secure, $name = null, $dist = 'public', $tld = 'vcap.me', $php = '8') {
     mustBeCallFromSite();
     Nginx::validateArguments($tld);
 
@@ -123,7 +123,7 @@ $app->command('site:link [--name=] [--dist=] [--tld=] [-d|--subdomain] [-s|--sec
         }
     }
 
-    Nginx::link($distPath, $serverName, $serverNames);
+    Nginx::link($distPath, $serverName, $serverNames, $secure, "php{$php}");
 })
     ->descriptions("Link a new site to the nginx docker.", [
         '--name' => 'Specify the name of the site. (Default: App folder name)',
@@ -134,7 +134,7 @@ $app->command('site:link [--name=] [--dist=] [--tld=] [-d|--subdomain] [-s|--sec
     ])
     ->setAliases(['link']);
 
-$app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain]', function ($subdomain, $name = null, $dist = 'public', $tld = 'vcap.me') {
+$app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain] [--php=]', function ($subdomain, $name = null, $dist = 'public', $tld = 'vcap.me', $php = '8') {
     mustBeCallFromSite();
     Nginx::validateArguments($tld);
 
@@ -143,7 +143,7 @@ $app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain]', funct
     $serverName = "$siteName.$tld";
     $serverNames = $subdomain ? "$serverName *.$serverName" : "$serverName";
 
-    Nginx::secure($distPath, $serverName, $serverNames);
+    Nginx::secure($distPath, $serverName, $serverNames, "php{$php}");
 })
     ->descriptions("Secure a site with SSL.", [
         '--name' => 'Specify the name of the site. (Default: App folder name)',

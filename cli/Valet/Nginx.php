@@ -36,14 +36,14 @@ class Nginx
     }
 
     //TODO Secure
-    public function link($dist, $baseName, $serverNames, $secure = false)
+    public function link($dist, $baseName, $serverNames, $secure = false, $phpVersion = 'php')
     {
         if($secure){
-            $this->secure($dist, $baseName, $serverNames);
+            $this->secure($dist, $baseName, $serverNames, $phpVersion);
             return;
         }
 
-        $conf = $this->buildUnsecureConf($baseName, $serverNames, CALL_SITE, $dist);
+        $conf = $this->buildUnsecureConf($baseName, $serverNames, CALL_SITE, $dist, $phpVersion);
 
         if(!$this->files->put(NGINX_CONF_PATH . "$baseName.conf", $conf)){
             throw new RuntimeException("Could not save conf file to: {DockerPath}/nginx/$baseName.conf");
@@ -54,7 +54,7 @@ class Nginx
         $this->docker->restart($this->containerName);
     }
 
-    public function buildUnsecureConf($baseName, $serverNames, $directory, $dist)
+    public function buildUnsecureConf($baseName, $serverNames, $directory, $dist, $phpVersion = 'php')
     {
         $stub = $this->files->get(__DIR__ . '/../stubs/nginx.laravel.stub');
         if(!$stub){
@@ -62,16 +62,16 @@ class Nginx
         }
 
         return str_replace(
-            ['{SERVER_NAME}', '{APP_DIR}', '{APP_DIST}'],
-            [$serverNames, "$directory", $dist],
+            ['{SERVER_NAME}', '{APP_DIR}', '{APP_DIST}', '{PHP_VERSION}'],
+            [$serverNames, "$directory", $dist, $phpVersion],
             $stub);
     }
 
-    public function secure($dist, $baseName, $serverNames)
+    public function secure($dist, $baseName, $serverNames, $phpVersion = 'php')
     {
         $this->files->ensureDirExists($this->certificatesPath(), user());
         $this->createCertificate($baseName);
-        $conf = $this->buildSecureConf($baseName, $serverNames, CALL_SITE, $dist);
+        $conf = $this->buildSecureConf($baseName, $serverNames, CALL_SITE, $dist, $phpVersion);
 
         if(!$this->files->put(NGINX_CONF_PATH . "$baseName.conf", $conf)){
             throw new RuntimeException("Could not save conf file to: {DockerPath}/nginx/$baseName.conf");
@@ -80,7 +80,7 @@ class Nginx
         $this->docker->restart($this->containerName);
     }
 
-    public function buildSecureConf($baseName, $serverNames, $directory, $dist)
+    public function buildSecureConf($baseName, $serverNames, $directory, $dist, $phpVersion = 'php')
     {
         $stub = $this->files->get(__DIR__ . '/../stubs/nginx.secure.laravel.stub');
         if(!$stub){
@@ -89,8 +89,8 @@ class Nginx
         $path = $this->certificatesDockerPath();
 
         return str_replace(
-            ['{SERVER_NAME}', '{APP_DIR}', '{APP_DIST}', '{SITE_CERT}', '{SITE_KEY}'],
-            [$serverNames, $directory, "/$dist", "$path/$baseName.crt", "$path/$baseName.key"],
+            ['{SERVER_NAME}', '{APP_DIR}', '{APP_DIST}', '{SITE_CERT}', '{SITE_KEY}', '{PHP_VERSION}'],
+            [$serverNames, $directory, "/$dist", "$path/$baseName.crt", "$path/$baseName.key", $phpVersion],
             $stub);
     }
 
