@@ -17,9 +17,9 @@ class Artisan
         $this->docker = $docker;
     }
 
-    public function run($command)
+    public function run($command, $phpContainer = 'php8')
     {
         $site = CALL_SITE;
-        $this->docker->run("run --rm --entrypoint \"php /var/www/html/$site/artisan\" $this->containerName $command");
+        $this->docker->run("run --rm --entrypoint \"$phpContainer /var/www/html/$site/artisan\" $this->containerName $command");
     }
 }

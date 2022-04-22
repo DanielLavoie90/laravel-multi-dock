@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": "^7.4 | ^8.0",
-        "illuminate/container": "^7.25",
+        "illuminate/container": "^9.9",
         "mnapoli/silly": "^1.7",
         "symfony/process": "^5.1",
         "phpseclib/phpseclib": "^2.0"
