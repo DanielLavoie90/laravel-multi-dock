@@ -4,12 +4,14 @@ namespace Valet\Commands;
 
 use Artisan;
 use Silly\Application;
+use Valet\Helpers\PHPHelper;
 
 class ArtisanCommands implements Commands
 {
     public static function register(Application $app)
     {
-        $app->command('artisan com* [--php=]', function ($com, $php = '8') {
+        $app->command('artisan com* [--php=]', function ($com, $php = null) {
+            $php = $php ?? PHPHelper::getDefaultPhpContainer();
             mustBeCallFromSite();
             $command = join(' ', $com);
             Artisan::run($command, "php$php");
@@ -19,12 +21,14 @@ class ArtisanCommands implements Commands
             ])
             ->setAliases(['art']);
 
-        $app->command('artisan:tinker [--php=]', function ($php = '8') {
+        $app->command('artisan:tinker [--php=]', function ($php = null) {
+            $php = $php ?? PHPHelper::getDefaultPhpContainer();
             mustBeCallFromSite();
             Artisan::run('tinker', "php$php");
         })->setAliases(['tinker']);
 
-        $app->command('artisan:migrate [-f|--fresh] [-s|--seed] [--php=]', function ($fresh, $seed, $php = '8') {
+        $app->command('artisan:migrate [-f|--fresh] [-s|--seed] [--php=]', function ($fresh, $seed, $php = null) {
+            $php = $php ?? PHPHelper::getDefaultPhpContainer();
             mustBeCallFromSite();
             $command = 'migrate';
             if ($fresh) {
@@ -41,7 +45,8 @@ class ArtisanCommands implements Commands
             ])
             ->setAliases(['mig']);
 
-        $app->command('artisan:seed [-c|--class=] [--php=]', function ($class = null, $php = '8') {
+        $app->command('artisan:seed [-c|--class=] [--php=]', function ($class = null, $php = null) {
+            $php = $php ?? PHPHelper::getDefaultPhpContainer();
             mustBeCallFromSite();
             $command = 'db:seed';
             if($class){

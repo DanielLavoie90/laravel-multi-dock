@@ -27,6 +27,7 @@
         ]
     },
     "bin": [
-        "bin/valet"
+        "bin/valet",
+        "bin/valet8"
     ]
 }

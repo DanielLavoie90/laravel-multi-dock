@@ -8,6 +8,8 @@ use Silly\Application;
 
 class ComposerCommands implements Commands
 {
+    const DefaultPHP = '';
+
     public static function register(Application $app)
     {
         $app->command('composer:run com*', function ($com) {
@@ -49,5 +51,18 @@ class ComposerCommands implements Commands
         })
             ->descriptions("Run composer update for the current site.")
             ->setAliases(['cu']);
+    }
+
+    public static function getDefaultPhpContainer(): string
+    {
+        switch ($_SERVER['PHP_VERSION']) {
+            case '8.0':
+                return '8';
+            case '7.4':
+                return '';
+            case '7.3':
+                return '73';
+        }
+        return self::DefaultPHP;
     }
 }

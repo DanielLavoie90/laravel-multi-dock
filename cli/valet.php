@@ -18,6 +18,7 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Valet\Commands\ArtisanCommands;
 use Valet\Commands\ComposerCommands;
+use Valet\Helpers\PHPHelper;
 use function Valet\info;
 use function Valet\isSite;
 use function Valet\output;
@@ -95,6 +96,15 @@ $app->command('db:user name password [-d|--database=] [-5|--mysql-5]', function 
         '--database' => 'Database to give access to the user. Use * to grant all. (Default=null)'
     ]);
 
+$app->command('db:up-user name password [-d|--database=] [-5|--mysql-5]', function ($name, $password, $mysql5, $database = null) {
+    Mysql::alterUser($name, $password, $database, !$mysql5);
+})
+    ->descriptions('Update a database user.', [
+        'name' => 'Name of the user to add.',
+        'password' => 'Password for the user.',
+        '--database' => 'Database to give access to the user. Use * to grant all. (Default=null)'
+    ]);
+
 $app->command('db:grant user password [-5|--mysql-5] [-d|--database=] [-g|--grant=] [-o|--without-grant-option]', function ($user, $password, $withoutGrantOption, $mysql5, $database='*', $grant = 'ALL') {
     Mysql::grantAccess($user, $password, $database, $grant, !$withoutGrantOption, !$mysql5);
 })
@@ -107,7 +117,8 @@ $app->command('db:grant user password [-5|--mysql-5] [-d|--database=] [-g|--gran
     ])
     ->setAliases(['grant']);
 
-$app->command('site:link [--name=] [--dist=] [--tld=] [-d|--subdomain] [-s|--secure] [--php=]', function ($input, $output, $subdomain, $secure, $name = null, $dist = 'public', $tld = 'vcap.me', $php = '8') {
+$app->command('site:link [--name=] [--dist=] [--tld=] [-d|--subdomain] [-s|--secure] [--php=]', function ($input, $output, $subdomain, $secure, $name = null, $dist = 'public', $tld = 'localtest.me', $php = null) {
+    $php = $php ?? PHPHelper::getDefaultPhpContainer();
     mustBeCallFromSite();
     Nginx::validateArguments($tld);
 
@@ -130,11 +141,12 @@ $app->command('site:link [--name=] [--dist=] [--tld=] [-d|--subdomain] [-s|--sec
         '--dist' => 'Distribution folder inside your application. Put `null` for root path. (Default=public)',
         '--secure' => 'Secure the new site with SSL.',
         '--subdomain' => 'Apply a wildcard subdomain to the server name in Nginx conf.',
-        '--tld' => 'Change the TLD for your application. (Default=vcap.me)'
+        '--tld' => 'Change the TLD for your application. (Default=localtest.me)'
     ])
     ->setAliases(['link']);
 
-$app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain] [--php=]', function ($subdomain, $name = null, $dist = 'public', $tld = 'vcap.me', $php = '8') {
+$app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain] [--php=]', function ($subdomain, $name = null, $dist = 'public', $tld = 'localtest.me', $php = null) {
+    $php = $php ?? PHPHelper::getDefaultPhpContainer();
     mustBeCallFromSite();
     Nginx::validateArguments($tld);
 
@@ -149,22 +161,22 @@ $app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain] [--php=
         '--name' => 'Specify the name of the site. (Default: App folder name)',
         '--dist' => 'Distribution folder inside your application. Put `null` for root path. (Default=public)',
         '--subdomain' => 'Apply a wildcard subdomain to the server name in Nginx conf.',
-        '--tld' => 'Change the TLD for your application. (Default=vcap.me)'
+        '--tld' => 'Change the TLD for your application. (Default=localtest.me)'
     ])
     ->setAliases(['secure']);
 
-ComposerCommands::register($app);
+/*ComposerCommands::register($app);*/
 
 ArtisanCommands::register($app);
 
-$app->command('npm com*', function ($com) {
+/*$app->command('npm com*', function ($com) {
     mustBeCallFromSite();
     $command = join(' ', $com);
     Npm::run($command);
 })->descriptions("Run an npm command for the current site.", [
     'com' => 'Command you wish to run for npm. (i.e. "run watch")'
 ])
-    ->setAliases(['n']);
+    ->setAliases(['n']);*/
 /*
  * Run the application.
  */

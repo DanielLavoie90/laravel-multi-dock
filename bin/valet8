@@ -4,7 +4,6 @@
 if (! isset($_SERVER['HOME'])) {
     $_SERVER['HOME'] = $_SERVER['USERPROFILE'];
 }
-
-$_SERVER['PHP_VERSION'] = '7.4';
+$_SERVER['PHP_VERSION'] = '8.0';
 
 require __DIR__.'/../cli/valet.php';

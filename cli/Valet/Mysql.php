@@ -36,7 +36,19 @@ class Mysql
         if($useMysql8) {
             $this->useMysql8();
         }
-        $command = "CREATE USER IF NOT EXISTS '$name'@'localhost' IDENTIFIED BY '$password';";
+        $command = "CREATE USER IF NOT EXISTS '$name'@'localhost' identified with mysql_native_password by '$password';";
+        $this->run($command, 'root', 'secret');
+        if($database) {
+            $this->grantAccess($name, $password, $database);
+        }
+    }
+
+    public function alterUser($name, $password, $database=null, $useMysql8=true)
+    {
+        if($useMysql8) {
+            $this->useMysql8();
+        }
+        $command = "ALTER USER '$name'@'localhost' identified with mysql_native_password by '$password';";
         $this->run($command, 'root', 'secret');
         if($database) {
             $this->grantAccess($name, $password, $database);
@@ -49,12 +61,12 @@ class Mysql
             $this->useMysql8();
         }
         $command = "GRANT $grant ON $database.* TO '$name'@'localhost'" .
-            ($useMysql8 ? '' : " IDENTIFIED BY '$password'") .
+            ($useMysql8 ? '' : " identified with mysql_native_password by '$password'") .
             ($withGrantOption ? " WITH GRANT OPTION;" : ";");
         $this->run($command, 'root', 'secret');
 
         $command = "GRANT $grant ON $database.* TO '$name'@'%'" .
-            ($useMysql8 ? '' : " IDENTIFIED BY '$password'") .
+            ($useMysql8 ? '' : " identified with mysql_native_password by '$password'") .
             ($withGrantOption ? " WITH GRANT OPTION;" : ";");
         $this->run($command, 'root', 'secret');
     }
