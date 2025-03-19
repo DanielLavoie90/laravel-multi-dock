@@ -1,10 +1,10 @@
-#!/usr/bin/env php
+#!/usr/bin/env php7.4
 <?php
 
 if (! isset($_SERVER['HOME'])) {
     $_SERVER['HOME'] = $_SERVER['USERPROFILE'];
 }
 
-$_SERVER['PHP_VERSION'] = '8.0';
+$_SERVER['PHP_VERSION'] = '7.4';
 
 require __DIR__.'/../cli/valet.php';

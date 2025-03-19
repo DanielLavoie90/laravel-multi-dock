@@ -5,9 +5,10 @@
  */
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';
-} else {
-    require_once __DIR__ . '/../../../autoload.php';
 }
+//else {
+//    require_once __DIR__ . '/../../../autoload.php';
+//}
 
 require_once __DIR__ . '/includes/facades.php';
 require_once __DIR__ . '/includes/helpers.php';
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Valet\Commands\ArtisanCommands;
 use Valet\Commands\ComposerCommands;
+use Valet\Commands\DrushCommands;
 use Valet\Helpers\PHPHelper;
 use function Valet\info;
 use function Valet\isSite;
@@ -32,6 +34,7 @@ $app = new Application('Valet for laravel docker', "1.0");
 function mustBeCallFromSite()
 {
     if (isSite()) {
+        info(CALL_SITE);
         return CALL_SITE;
     }
     throw new InvalidArgumentException("Cannot find folder: `" . DOCKER_COMPOSE_PATH . '/src/' . CALL_SITE . "`");
@@ -168,6 +171,7 @@ $app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain] [--php=
 /*ComposerCommands::register($app);*/
 
 ArtisanCommands::register($app);
+DrushCommands::register($app);
 
 /*$app->command('npm com*', function ($com) {
     mustBeCallFromSite();

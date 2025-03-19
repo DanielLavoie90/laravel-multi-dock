@@ -15,6 +15,7 @@ class DockerCompose
     {
         $dockerCommand = "cd " . DOCKER_COMPOSE_PATH . " && docker-compose $command";
         if($passthru) {
+            output('<info>'.$dockerCommand.'</info>');
             $this->cli->passthru($dockerCommand);
             return true;
         } else {

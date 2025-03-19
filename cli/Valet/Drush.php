@@ -4,9 +4,7 @@
 namespace Valet;
 
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-
-class Artisan
+class Drush
 {
     /**
      * @var DockerCompose
@@ -21,6 +19,6 @@ class Artisan
     public function run($command, $phpContainer = 'php8')
     {
         $site = CALL_SITE;
-        $this->docker->run("exec -w /var/www/html/$site $phpContainer php artisan $command");
+        $this->docker->run("exec $phpContainer php /var/www/html/$site/vendor/bin/drush $command");
     }
 }

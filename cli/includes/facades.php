@@ -42,6 +42,10 @@ class Composer extends Facade
 {
 }
 
+class Drush extends Facade
+{
+}
+
 class DockerCompose extends Facade
 {
 }
