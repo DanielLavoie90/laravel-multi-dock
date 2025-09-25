@@ -13,12 +13,13 @@ class DockerCompose
 
     public function run($command, $passthru=true, $onError=null)
     {
-        $dockerCommand = "cd " . DOCKER_COMPOSE_PATH . " && docker-compose $command";
+        $dockerCommand = "cd " . DOCKER_COMPOSE_PATH . " && script -q -c \"docker-compose $command\" /dev/null";
         if($passthru) {
-            output('<info>'.$dockerCommand.'</info>');
+            output('<info>Passthru: '.$dockerCommand.'</info>');
             $this->cli->passthru($dockerCommand);
             return true;
         } else {
+            output('<info>'.$dockerCommand.'</info>');
             return $this->cli->run($dockerCommand, $onError);
         }
     }

@@ -106,6 +106,13 @@ class CommandLine
             $process = new Process([$command]);
         }
 
+        // Enable TTY if the current PHP process is running in a terminal
+        if (function_exists('posix_isatty') && posix_isatty(STDOUT)) {
+            $process->setTty(true);
+        }
+        // Enable STDIN passthrough
+        $process->setInput(fopen('php://stdin', 'r'));
+
         $processOutput = '';
         $process->setTimeout(null)->run(function ($type, $line) use (&$processOutput) {
             $processOutput .= $line;

@@ -21,6 +21,6 @@ class Artisan
     public function run($command, $phpContainer = 'php8')
     {
         $site = CALL_SITE;
-        $this->docker->run("exec -w /var/www/html/$site $phpContainer php artisan $command");
+        $this->docker->run("exec -it -w /var/www/html/$site $phpContainer php artisan $command");
     }
 }
