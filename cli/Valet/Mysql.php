@@ -19,7 +19,7 @@ class Mysql
 
     public function run($command, $user='homestead', $password='secret')
     {
-        $this->docker->run("exec -T $this->containerName mysql -u$user -p$password -e \"$command\"");
+        $this->docker->run("exec -T $this->containerName mysql -u$user -p$password -e \\\"$command\\\"");
     }
 
     public function createDatabase($name, $useMysql8=true)

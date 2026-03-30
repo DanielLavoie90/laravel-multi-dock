@@ -67,6 +67,12 @@ class Nginx
             $stub);
     }
 
+    public function ssl($baseName)
+    {
+        $this->files->ensureDirExists($this->certificatesPath(), user());
+        $this->createCertificate($baseName);
+    }
+
     public function secure($dist, $baseName, $serverNames, $phpVersion = 'php')
     {
         $this->files->ensureDirExists($this->certificatesPath(), user());

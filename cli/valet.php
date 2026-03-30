@@ -168,6 +168,12 @@ $app->command('site:secure [--name=] [--dist=] [--tld=] [-d|--subdomain] [--php=
     ])
     ->setAliases(['secure']);
 
+$app->command('site:ssl [domain]', function ($domain = "test.localtest.me") {
+    Nginx::ssl($domain);
+})
+    ->descriptions("Create SSL certs for a domain.", [])
+    ->setAliases(['ssl']);
+
 /*ComposerCommands::register($app);*/
 
 ArtisanCommands::register($app);
