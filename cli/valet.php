@@ -75,7 +75,7 @@ $app->command('ssh [container]', function ($container = 'php') {
         'container' => 'Name of the service of the container you want to ssh into. (Default=php)'
     ]);
 
-$app->command('db:new [name] [-5|--mysql-5]', function ($input, $output, $mysql5, $name = null) {
+$app->command('db:new [name] [-m|--mysql=]', function ($input, $output, $mysql='', $name = null) {
     if (!$name) {
         if (!Prompt::yesNoQuestion($this, $input, $output, "Create database " . CALL_SITE . "? [Y/n]", true)) {
             $output->writeln('Ok bye!');
@@ -84,14 +84,14 @@ $app->command('db:new [name] [-5|--mysql-5]', function ($input, $output, $mysql5
     }
     $dbName = $name ?? CALL_SITE;
 
-    Mysql::createDatabase($dbName, !$mysql5);
+    Mysql::createDatabase($dbName, $mysql);
 })
     ->descriptions("Create a new database.", [
         'name' => 'name of the database to create. (Default: folder where you called valet)'
     ]);
 
-$app->command('db:user name password [-d|--database=] [-5|--mysql-5]', function ($name, $password, $mysql5, $database = null) {
-    Mysql::createUser($name, $password, $database, !$mysql5);
+$app->command('db:user name password [-d|--database=] [-m|--mysql=]', function ($name, $password,  $mysql='', $database = null) {
+    Mysql::createUser($name, $password, $database, $mysql);
 })
     ->descriptions('Create a new database user.', [
         'name' => 'Name of the user to add.',
@@ -99,8 +99,8 @@ $app->command('db:user name password [-d|--database=] [-5|--mysql-5]', function 
         '--database' => 'Database to give access to the user. Use * to grant all. (Default=null)'
     ]);
 
-$app->command('db:up-user name password [-d|--database=] [-5|--mysql-5]', function ($name, $password, $mysql5, $database = null) {
-    Mysql::alterUser($name, $password, $database, !$mysql5);
+$app->command('db:up-user name password [-d|--database=] [-m|--mysql=]', function ($name, $password, $mysql='', $database = null) {
+    Mysql::alterUser($name, $password, $database, $mysql);
 })
     ->descriptions('Update a database user.', [
         'name' => 'Name of the user to add.',
@@ -108,8 +108,8 @@ $app->command('db:up-user name password [-d|--database=] [-5|--mysql-5]', functi
         '--database' => 'Database to give access to the user. Use * to grant all. (Default=null)'
     ]);
 
-$app->command('db:grant user password [-5|--mysql-5] [-d|--database=] [-g|--grant=] [-o|--without-grant-option]', function ($user, $password, $withoutGrantOption, $mysql5, $database='*', $grant = 'ALL') {
-    Mysql::grantAccess($user, $password, $database, $grant, !$withoutGrantOption, !$mysql5);
+$app->command('db:grant user password [-m|--mysql=] [-d|--database=] [-g|--grant=] [-o|--without-grant-option]', function ($user, $password, $withoutGrantOption, $mysql='', $database='*', $grant = 'ALL') {
+    Mysql::grantAccess($user, $password, $database, $grant, !$withoutGrantOption, $mysql);
 })
     ->descriptions('Give a user access to a database.', [
         'user' => 'User you want to give access.',

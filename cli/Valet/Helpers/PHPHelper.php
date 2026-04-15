@@ -4,7 +4,7 @@ namespace Valet\Helpers;
 
 class PHPHelper
 {
-    const DefaultPHP = '';
+    const DefaultPHP = '8';
 
     public static function getDefaultPhpContainer(): string
     {
@@ -12,9 +12,8 @@ class PHPHelper
             case '8.0':
                 return '8';
             case '7.4':
-                return '';
             case '7.3':
-                return '73';
+                return '74';
         }
         return self::DefaultPHP;
     }

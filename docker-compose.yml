@@ -13,30 +13,32 @@ services:
     networks:
       - laravel
 
-#  mysql:
-#    image: mysql:5.7.29
-#    container_name: mysql
-#    command: ['--innodb-log-file-size=20000000']
-#    restart: unless-stopped
-#    tty: true
-#    ports:
-#      - "3306:3306"
-#    environment:
-#      MYSQL_DATABASE: homestead
-#      MYSQL_USER: homestead
-#      MYSQL_PASSWORD: secret
-#      MYSQL_ROOT_PASSWORD: secret
-#      SERVICE_TAGS: dev
-#      SERVICE_NAME: mysql
-#    volumes:
-#      - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
-#    networks:
-#      - laravel
+  mysql80:
+    image: mysql:8.0.45
+    container_name: mysql80
+    command: ['--innodb-log-file-size=20000000', '--default-authentication-plugin=mysql_native_password']
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3308:3306"
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+    environment:
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql80
+    volumes:
+      - ${DATA_PATH_HOST}/mysql80:/var/lib/mysql
+    networks:
+      - laravel
 
   mysql8:
-    image: mysql:8.0.24
-    container_name: mysql8
-    command: ['--innodb-log-file-size=20000000', '--default-authentication-plugin=mysql_native_password']
+    image: mysql:8.4.8
+    container_name: mysql84
+    command: ['--innodb-log-file-size=50331648']
     restart: unless-stopped
     tty: true
     ports:
@@ -49,9 +51,9 @@ services:
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
-      SERVICE_NAME: mysql8
+      SERVICE_NAME: mysql84
     volumes:
-      - ${DATA_PATH_HOST}/mysql8:/var/lib/mysql
+      - ${DATA_PATH_HOST}/mysql84:/var/lib/mysql
     networks:
       - laravel
 
@@ -419,26 +421,26 @@ services:
         aliases:
           - api.cdpc.localtest.me
 
-  composer:
-    image: composer:latest
-    container_name: composer
-    volumes:
-      - ./src:/var/www/html
-    working_dir: /var/www/html
-    depends_on:
-      - php8
-    networks:
-      - laravel
+#  composer:
+#    image: composer:latest
+#    container_name: composer
+#    volumes:
+#      - ./src:/var/www/html
+#    working_dir: /var/www/html
+#    depends_on:
+#      - php8
+#    networks:
+#      - laravel
 
-  node:
-    image: node:latest
-    container_name: node
-    volumes:
-      - ./src:/var/www/html
-    working_dir: /var/www/html
-    entrypoint: ['node']
-    networks:
-      - laravel
+#  node:
+#    image: node:latest
+#    container_name: node
+#    volumes:
+#      - ./src:/var/www/html
+#    working_dir: /var/www/html
+#    entrypoint: ['node']
+#    networks:
+#      - laravel
 
   chromium:
     image: zenika/alpine-chrome

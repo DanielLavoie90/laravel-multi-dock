@@ -1283,36 +1283,6 @@ RUN if [ ${INSTALL_DNSUTILS} = true ]; then \
 ;fi
 
 ###########################################################################
-# Install Node/NPM:
-###########################################################################
-
-RUN apt-get update && apt-get install -y curl \
-    && curl -fsSL https://deb.nodesource.com/setup_23.x | bash - \
-    && apt-get install -y nodejs \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Verify installations
-RUN php -v && node -v && npm -v
-
-RUN apt-get update && apt-get install -y gconf-service libasound2  \
-    libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1  \
-    libgbm1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0  \
-    libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1  \
-    libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6  \
-    libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation  \
-    libappindicator1 libnss3 lsb-release xdg-utils wget libgbm-dev libxshmfence-dev
-
-RUN npm install --location=global --unsafe-perm puppeteer@^17
-
-###########################################################################
-# Install Composer:
-###########################################################################
-
-RUN curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer
-
-###########################################################################
 # Check PHP version:
 ###########################################################################
 
@@ -1332,7 +1302,7 @@ USER root
 # Clean up
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    rm /var/log/lastlog /var/log/faillog
+    rm -f /var/log/lastlog /var/log/faillog
 
 # Configure non-root user.
 ARG PUID=1000
@@ -1341,10 +1311,7 @@ ARG PGID=1000
 ENV PGID ${PGID}
 
 RUN groupmod -o -g ${PGID} www-data && \
-    usermod -o -u ${PUID} -g www-data www-data && \
-    mkdir /home/www &&  \
-    chown www-data:www-data /home/www && \
-    usermod -d /home/www www-data
+    usermod -o -u ${PUID} -g www-data www-data
 
 # Adding the faketime library to the preload file needs to be done last
 # otherwise it will preload it for all commands that follow in this file
@@ -1355,27 +1322,6 @@ RUN if [ ${INSTALL_FAKETIME} = true ]; then \
 # Configure locale.
 ARG LOCALE=POSIX
 ENV LC_ALL ${LOCALE}
-
-# Configure SSH
-USER www-data
-
-ARG SSH_PVT_KEY
-ARG SSH_PUB_KEY
-
-RUN echo ${SSH_Pg_KEY}
-
-# Authorize SSH Host
-RUN mkdir -p /home/www/.ssh && \
-    chmod 0700 /home/www/.ssh && \
-    ssh-keyscan 15.223.13.23 > /home/www/.ssh/known_hosts
-
-# Add the keys and set permissions
-RUN echo "${SSH_PVT_KEY}" > /home/www/.ssh/id_rsa && \
-    echo "${SSH_PUB_KEY}" > /home/www/.ssh/id_rsa.pub && \
-    chmod 600 /home/www/.ssh/id_rsa && \
-    chmod 600 /home/www/.ssh/id_rsa.pub
-
-USER root
 
 WORKDIR /var/www
 
